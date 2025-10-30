@@ -1,0 +1,146 @@
+Key Changes Made:
+Proper Scroll Container Setup:
+
+Added overflow-hidden to the outer container
+
+Created an absolutely positioned inner container with overflow-auto
+
+Ensured it fills all available space
+
+Improved Zoom Implementation:
+
+Replaced width/height calculations with CSS transform: scale()
+
+Set fixed dimensions for the content (1200x900px)
+
+Added transformOrigin: '0 0' for proper zoom behavior
+
+Iframe Adjustments:
+
+Removed zoom parameter from URL
+
+Simplified iframe styling
+
+Complete Fixed Component
+Here's the complete solution for both PDF and image viewers:
+
+jsx
+export default function DocumentViewer({ file }: DocumentViewerProps) {
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [rotation, setRotation] = useState(0);
+
+  // ... (keep your existing handler functions) ...
+
+  const renderFilePreview = () => {
+    const fileType = file.fileType?.toLowerCase() || '';
+    
+    if (fileType.includes('pdf')) {
+      return (
+        <div className="w-full h-full flex flex-col">
+          {/* Keep your existing toolbar code */}
+          
+          {/* Updated PDF Viewer */}
+          <div className="flex-1 bg-gray-900 p-0 relative overflow-hidden">
+            <div 
+              className="overflow-auto w-full h-full"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }}
+            >
+              <div 
+                style={{
+                  width: '1200px',
+                  minWidth: '1200px',
+                  height: '900px',
+                  backgroundColor: 'white',
+                  transform: `scale(${zoomLevel / 100})`,
+                  transformOrigin: '0 0'
+                }}
+              >
+                <iframe
+                  src={`/uploads/${file.fileName}#toolbar=0&navpanes=0&scrollbar=1`}
+                  className="border-0 w-full h-full"
+                  title={`PDF Preview - ${file.originalName}`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    if (fileType.includes('image')) {
+      return (
+        <div className="w-full h-full flex flex-col">
+          {/* Keep your existing toolbar code */}
+          
+          {/* Updated Image Viewer */}
+          <div className="flex-1 bg-gray-900 p-0 relative overflow-hidden">
+            <div 
+              className="overflow-auto w-full h-full"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+              }}
+            >
+              <div
+                style={{
+                  width: '1200px',
+                  minWidth: '1200px',
+                  height: '900px',
+                  backgroundColor: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: `scale(${zoomLevel / 100}) rotate(${rotation}deg)`,
+                  transformOrigin: '0 0'
+                }}
+              >
+                <img
+                  src={`/uploads/${file.fileName}`}
+                  alt="Document preview"
+                  className="object-contain max-w-full max-h-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // ... (keep your other file type handlers) ...
+  };
+
+  return (
+    // ... (keep your existing return structure) ...
+  );
+}
+Additional Recommendations
+For Better Performance:
+
+Consider using a library like react-pdf for PDF rendering
+
+Implement debouncing for zoom/rotation changes
+
+UI Improvements:
+
+Add a scrollbar visibility indicator
+
+Consider adding grab/pan functionality for large zoom levels
+
+Testing:
+
+Test with various document sizes
+
+Verify behavior on different browsers
+
+Check mobile responsiveness
+
+This solution should reliably show both horizontal and vertical scroll bars when the content exceeds the viewport dimensions at any zoom level.

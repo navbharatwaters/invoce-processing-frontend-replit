@@ -1,0 +1,171 @@
+AI Powered Document Processing Application
+Create a modern, responsive web application for automated document processing with the following specifications:
+
+Core Application Structure
+Main Interface: Split-screen layout with:
+
+Left Panel: Original document viewer (PDF/image/DOC preview)
+
+Right Panel: Simple editable table showing extracted Excel data
+
+Top Navigation: Dashboard, Analytics, Settings tabs
+
+Header: File upload area, processing status bar, action buttons
+
+Key Features
+1. Document Processing Workflow
+Webhook URL Configuration: Simple input field in settings for processing endpoint
+Default webhook url 
+https://aiautoeye.app.n8n.cloud/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871
+which can be changed in settings tab
+
+Once file is uploaded it should be sent to webhook url for processing
+
+Multi-format File Upload: Support PDF, DOC, DOCX, PNG, JPG, JPEG with drag-and-drop
+
+Real-time Processing Status: Live progress bar showing:
+
+"Uploading..." (0-25%)
+
+"Processing document..." (25-75%)
+
+"Extracting data..." (75-95%)
+
+"Complete!" (100%)
+
+Status Notifications: Toast messages for success/error states
+
+Once file is processed by workflow the out is in excel received by webhook normal processing time is around 2 minutes so app should wait to receive file
+
+2. Simple Excel Data Editing
+Basic Table Interface: Clean, spreadsheet-like grid display
+
+Click-to-Edit Cells: Single click to edit any cell value
+
+Auto-save: Changes save automatically as user types
+
+Visual Highlighting: Light background color for edited cells
+
+No Complex Features: No formulas, functions, or advanced formatting needed
+
+3. Authentication & Security
+Simple Login System:
+
+Username/password fields
+
+"Remember me" checkbox
+
+Basic session management
+
+No OAuth complexity
+
+4. Google Drive Integration
+Service Account Setup:
+
+Pre-configured Google service account (no user OAuth needed)
+
+Automatic file upload to designated Google Drive folder
+
+Background upload with success confirmation
+
+5. Approval & Export System
+Two Main Actions:
+
+"Approve & Send" - Upload to Google Drive + download locally
+
+"Download Only" - Just download the Excel file
+
+Export Format: Standard .xlsx Excel files
+
+Success Feedback: Clear confirmation messages
+
+6. Analytics Dashboard
+Simple analytics showing:
+
+Total Files Processed (number counter)
+
+Files Approved Without Changes (percentage)
+
+Files Modified Before Approval (percentage)
+
+Basic Bar Chart: Monthly processing volume
+
+Recent Activity: List of last 10 processed files
+
+Technical Implementation
+Frontend Stack
+Framework: React with JavaScript (keep it simple)
+
+Styling: Tailwind CSS for clean, modern design
+
+Table Component: Simple HTML table with contentEditable cells
+
+File Preview:
+
+PDF: Simple iframe or react-pdf
+
+Images: Standard img tags
+
+Documents: Text preview or thumbnail
+
+Progress Indicators: CSS-based progress bars
+
+Notifications: Simple toast/alert system
+
+Key Components
+text
+- LoginPage (username/password form)
+- Dashboard (main split-screen interface)
+- FileUploader (drag-and-drop area)
+- DocumentViewer (left panel - original file)
+- DataTable (right panel - editable Excel data)
+- StatusBar (processing progress)
+- SettingsPanel (webhook URL configuration)
+- AnalyticsPage (basic stats and charts)
+API Integration
+Webhook Communication: Simple POST requests to user's endpoint
+
+File Upload: FormData with XMLHttpRequest for progress tracking
+
+Google Drive: Server-side service account integration (no client-side OAuth)
+
+Status Updates: Polling every 2 seconds during processing
+
+UI Design Principles
+Clean & Minimal: Lots of white space, simple typography
+
+Professional Colors: Blue (#3B82F6) primary, gray (#6B7280) secondary
+
+Easy Navigation: Clear labels, intuitive button placement
+
+Responsive Design: Works on desktop and tablet
+
+Loading States: Skeleton screens and spinners for better UX
+
+Application Flow
+Login: Simple username/password authentication
+
+Upload: Drag file to upload area or click to browse
+
+Process: Real-time status bar shows processing progress
+
+Review: Side-by-side comparison of original document and extracted data
+
+Edit: Click any cell in the table to modify values (optional)
+
+Approve: Click "Approve & Send" to upload to Google Drive and download
+
+Analytics: View processing statistics in separate tab
+
+Simplified Features
+No Complex Editing: Just basic cell value changes
+
+No User Google Authentication: Service account handles all Google Drive operations
+
+Simple Login: Basic username/password, no social logins
+
+Straightforward UI: Focus on core functionality, avoid feature bloat
+
+Easy Setup: Minimal configuration required
+
+Build this as a user-friendly, single-page application that prioritizes simplicity and ease of use over advanced features. The goal is efficient document processing with minimal user friction.

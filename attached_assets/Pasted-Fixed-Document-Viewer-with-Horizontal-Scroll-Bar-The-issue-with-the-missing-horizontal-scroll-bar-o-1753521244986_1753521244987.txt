@@ -1,0 +1,215 @@
+Fixed Document Viewer with Horizontal Scroll Bar
+The issue with the missing horizontal scroll bar occurs because the scroll container isn't properly constrained and the zoom implementation needs adjustment. Here's the complete solution:
+
+jsx
+import { useState } from "react";
+import { FileText, ZoomIn, ZoomOut, RotateCw, Download, Maximize2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface DocumentViewerProps {
+  file: any;
+}
+
+export default function DocumentViewer({ file }: DocumentViewerProps) {
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [rotation, setRotation] = useState(0);
+
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 25, 200));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - 25, 50));
+  };
+
+  const handleRotate = () => {
+    setRotation(prev => (prev + 90) % 360);
+  };
+
+  const handleReset = () => {
+    setZoomLevel(100);
+    setRotation(0);
+  };
+
+  if (!file) {
+    return (
+      <div className="h-full flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500">Select a document file to view the original document</p>
+        </div>
+      </div>
+    );
+  }
+
+  const renderFilePreview = () => {
+    const fileType = file.fileType?.toLowerCase() || '';
+    
+    if (fileType.includes('pdf')) {
+      return (
+        <div className="w-full h-full flex flex-col">
+          {/* PDF Toolbar - unchanged */}
+          <div className="flex items-center justify-between p-3 bg-gray-50 border-b">
+            {/* ... existing toolbar code ... */}
+          </div>
+          
+          {/* Fixed PDF Viewer */}
+          <div className="flex-1 bg-gray-900 p-0 relative overflow-hidden">
+            <div 
+              className="overflow-auto w-full h-full"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#6b7280 #1f2937'
+              }}
+            >
+              <div 
+                style={{
+                  width: '100%',
+                  minWidth: '100%',
+                  height: '100%',
+                  backgroundColor: 'white',
+                  transform: `scale(${zoomLevel / 100})`,
+                  transformOrigin: '0 0',
+                  position: 'relative'
+                }}
+              >
+                <iframe
+                  src={`/uploads/${file.fileName}#toolbar=0&navpanes=0&scrollbar=1`}
+                  className="border-0 w-full h-full"
+                  title={`PDF Preview - ${file.originalName}`}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    if (fileType.includes('image') || ['png', 'jpg', 'jpeg'].some(ext => fileType.includes(ext))) {
+      return (
+        <div className="w-full h-full flex flex-col">
+          {/* Image Toolbar - unchanged */}
+          <div className="flex items-center justify-between p-3 bg-gray-50 border-b">
+            {/* ... existing toolbar code ... */}
+          </div>
+          
+          {/* Fixed Image Viewer */}
+          <div className="flex-1 bg-gray-900 p-0 relative overflow-hidden">
+            <div 
+              className="overflow-auto w-full h-full"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#6b7280 #1f2937'
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  minWidth: '100%',
+                  height: '100%',
+                  backgroundColor: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: `scale(${zoomLevel / 100}) rotate(${rotation}deg)`,
+                  transformOrigin: '0 0',
+                  position: 'relative'
+                }}
+              >
+                <img
+                  src={`/uploads/${file.fileName}`}
+                  alt="Document preview"
+                  className="object-contain"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    position: 'absolute'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // For DOC/DOCX files - unchanged
+    return (
+      <div className="text-center">
+        <FileText className="w-24 h-24 text-gray-400 mx-auto mb-4" />
+        <p className="text-gray-600">Document Preview</p>
+        <p className="text-sm text-gray-500">{file.originalName}</p>
+      </div>
+    );
+  };
+
+  return (
+    <div className="h-full flex flex-col min-h-0">
+      <div className="px-4 py-3 border-b border-gray-100 flex-shrink-0">
+        <h3 className="font-medium text-gray-900">Original Document</h3>
+        <p className="text-sm text-gray-500">{file.originalName}</p>
+      </div>
+      <div className="flex-1 p-4 overflow-hidden min-h-0">
+        {renderFilePreview()}
+      </div>
+    </div>
+  );
+}
+Key Fixes Implemented:
+Scroll Container Structure:
+
+Added proper absolute positioning for the scroll container
+
+Ensured it fills all available space
+
+Added custom scrollbar styling for better visibility
+
+Zoom Implementation:
+
+Changed to use CSS transform: scale() instead of width/height changes
+
+Set transformOrigin: '0 0' for consistent zoom behavior
+
+Removed fixed dimensions in favor of percentage-based sizing
+
+Content Layout:
+
+Used position: relative on the content container
+
+Made iframe/image fill the container with position: absolute
+
+Ensured proper object containment for images
+
+Scrollbar Visibility:
+
+Explicitly set scrollbarWidth: 'thin' for consistent appearance
+
+Defined scrollbarColor for better visibility
+
+This solution should now reliably show both horizontal and vertical scroll bars when the content exceeds the viewport dimensions at any zoom level, while maintaining all other functionality.
+
+Additional Recommendations:
+For very large documents, consider:
+
+Implementing virtual scrolling
+
+Adding a zoom slider for more precise control
+
+Including a "fit to width" option

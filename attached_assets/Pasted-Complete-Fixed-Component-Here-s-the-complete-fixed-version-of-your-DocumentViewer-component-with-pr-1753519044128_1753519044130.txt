@@ -1,0 +1,93 @@
+Complete Fixed Component
+Here's the complete fixed version of your DocumentViewer component with proper scrolling behavior:
+
+jsx
+export default function DocumentViewer({ file }: DocumentViewerProps) {
+  // ... existing state and handlers ...
+
+  const renderFilePreview = () => {
+    const fileType = file.fileType?.toLowerCase() || '';
+    
+    if (fileType.includes('pdf')) {
+      return (
+        <div className="w-full h-full flex flex-col">
+          {/* PDF Toolbar (unchanged) */}
+          
+          {/* PDF Viewer */}
+          <div className="flex-1 bg-gray-900 p-0 relative">
+            <div 
+              className="overflow-auto w-full"
+              style={{ height: 'calc(100vh - 120px)' }}
+            >
+              <div 
+                style={{
+                  width: '1200px',
+                  height: '900px',
+                  backgroundColor: 'white',
+                  transform: `scale(${zoomLevel / 100})`,
+                  transformOrigin: '0 0'
+                }}
+              >
+                <iframe
+                  src={`/uploads/${file.fileName}#toolbar=0&navpanes=0&scrollbar=1&page=1`}
+                  className="border-0 w-full h-full"
+                  title={`PDF Preview - ${file.originalName}`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    if (fileType.includes('image')) {
+      return (
+        <div className="w-full h-full flex flex-col">
+          {/* Image Toolbar (unchanged) */}
+          
+          {/* Image Viewer */}
+          <div className="flex-1 bg-gray-900 p-0 relative">
+            <div 
+              className="overflow-auto w-full"
+              style={{ height: 'calc(100vh - 120px)' }}
+            >
+              <div
+                style={{
+                  width: '1200px',
+                  height: '900px',
+                  backgroundColor: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: `scale(${zoomLevel / 100}) rotate(${rotation}deg)`,
+                  transformOrigin: '0 0'
+                }}
+              >
+                <img
+                  src={`/uploads/${file.fileName}`}
+                  alt="Document preview"
+                  className="object-contain max-w-full max-h-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // ... rest of the component remains the same ...
+  };
+
+  return (
+    // ... existing return structure ...
+  );
+}
+This solution should properly show both horizontal and vertical scroll bars when zoomed in, while maintaining all other functionality. The key changes are:
+
+Using CSS transforms for zooming instead of width/height changes
+
+Proper scroll container setup with overflow-auto
+
+Consistent dimensions for the content container
+
+Proper transform origin for natural zoom behavior
