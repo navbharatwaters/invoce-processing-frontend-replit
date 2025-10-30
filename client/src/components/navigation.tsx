@@ -47,7 +47,14 @@ export default function Navigation() {
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <h1 className="text-xl font-semibold text-gray-900">Navbharat Waters</h1>
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/images/logo.jpeg" 
+                alt="Navbharat Waters" 
+                className="h-10 w-auto"
+              />
+              <h1 className="text-xl font-semibold text-gray-900">Navbharat Waters</h1>
+            </div>
             <div className="flex space-x-1">
               {tabs.map((tab) => {
                 const Icon = tab.icon;

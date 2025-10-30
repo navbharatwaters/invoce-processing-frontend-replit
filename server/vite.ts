@@ -69,6 +69,7 @@ export async function setupVite(app: Express, server: Server) {
 
 export function serveStatic(app: Express) {
   const distPath = path.resolve(import.meta.dirname, "public");
+  const rootDistPath = path.resolve(import.meta.dirname, ".");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
@@ -76,6 +77,10 @@ export function serveStatic(app: Express) {
     );
   }
 
+  // Serve static files from root dist (for images, etc.)
+  app.use(express.static(rootDistPath));
+  
+  // Serve static files from public folder
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist

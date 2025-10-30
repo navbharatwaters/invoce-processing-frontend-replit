@@ -63,6 +63,13 @@ export default function LoginPage() {
         <Card className="bg-white shadow-lg">
           <CardContent className="pt-6">
             <div className="text-center mb-8">
+              <div className="flex justify-center mb-4">
+                <img 
+                  src="/images/logo.jpeg" 
+                  alt="Navbharat Waters Logo" 
+                  className="h-24 w-auto"
+                />
+              </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Navbharat Waters</h1>
               <p className="text-gray-600">AI-Powered Document Processer</p>
             </div>
