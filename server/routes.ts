@@ -146,7 +146,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const settings = await storage.getSettings(req.session.userId!);
-      const webhookUrl = settings?.webhookUrl || "https://n8n.bargainpcmart.com/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871";
+      // Use the navbharatwater.one webhook URL as requested
+      const webhookUrl = settings?.webhookUrl || "https://navbharatwater.one/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871";
+      console.log("Using webhook URL:", webhookUrl);
+      
+      // Log the webhook URL being used
+      console.log(`Using webhook URL: ${webhookUrl}`);
+      
+      // Check if the webhook URL is from navbharatwater.one and warn if it is
+      if (webhookUrl.includes('navbharatwater.one')) {
+        console.warn('Warning: Using navbharatwater.one webhook URL which may not be properly configured yet.');
+      }
 
       const file = await storage.createFile({
         userId: req.session.userId!,
@@ -371,7 +381,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'X-Request-ID': requestId,
           'X-File-ID': fileId.toString(),
           'X-Timestamp': new Date().toISOString(),
-          'User-Agent': 'AIAutoEye/1.0',
+          'User-Agent': 'Navbharat Waters/1.0',
           'Accept': 'application/json, text/plain, */*',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache'

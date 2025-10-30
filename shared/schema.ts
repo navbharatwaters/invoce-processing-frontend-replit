@@ -31,7 +31,7 @@ export const files = pgTable("files", {
 export const settings = pgTable("settings", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull(),
-  webhookUrl: text("webhook_url").default("https://aiautoeye.app.n8n.cloud/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871"),
+  webhookUrl: text("webhook_url").default("https://navbharatwater.one/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871"),
   processingTimeout: integer("processing_timeout").default(5),
   pollingInterval: integer("polling_interval").default(2),
   autoApprove: boolean("auto_approve").default(false),

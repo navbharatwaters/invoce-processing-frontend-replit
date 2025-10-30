@@ -72,7 +72,7 @@ export class MemStorage implements IStorage {
     // Create default settings and analytics
     await this.createSettings({
       userId: id,
-      webhookUrl: "https://n8n.bargainpcmart.com/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871",
+      webhookUrl: "https://navbharatwater.one/webhook/5fd4e2ef-bc4e-404a-9b6e-23ccd70c6871",
       processingTimeout: 5,
       pollingInterval: 2,
       autoApprove: false,
